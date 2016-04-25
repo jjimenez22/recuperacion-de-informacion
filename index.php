@@ -5,6 +5,6 @@
 		$uri = 'http://';
 	}
 	$uri .= $_SERVER['HTTP_HOST'];
-	header('Location: '.$uri.'/stemming/stemtest.php');
+	header('Location: '.$uri.'/recuperacion-de-informacion/rss_parser/rssparser.php');
 	exit;
 ?>

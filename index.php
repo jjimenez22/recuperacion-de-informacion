@@ -1,10 +1,7 @@
 <?php
-	if (!empty($_SERVER['HTTPS']) && ('on' == $_SERVER['HTTPS'])) {
-		$uri = 'https://';
-	} else {
-		$uri = 'http://';
-	}
-	$uri .= $_SERVER['HTTP_HOST'];
-	header('Location: '.$uri.'/stemming/stemtest.php');
-	exit;
+	require 'update.php';
+	require 'tfidf.php';
+
+	update_index();
+	update_vecs();
 ?>

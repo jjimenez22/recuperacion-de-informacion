@@ -40,15 +40,15 @@
       echo '<table border="1">';
       echo '<tr>';
       echo '<th>doc/stem</th>';
-      foreach ($tfs as $doc => $stem_list) {
+     foreach ($tfs as $doc => $stem_list) {
+          echo '<tr>';
+         echo '<th>'.$doc.'</th>';
          foreach ($stem_list as $stem => $n_aparitions) {
             echo '<th>'.$stem.'</th>';
          }
-      }
-      echo '</th>';
-      foreach ($tfs as $doc => $stem_list) {
+         echo '</tr>';
          echo '<tr>';
-         echo '<th>'.$doc.'</th>';
+         echo '<th> -> </th>';
          foreach ($stem_list as $stem => $n_aparitions) {
             echo '<td>'.$n_aparitions.'</td>';
          }

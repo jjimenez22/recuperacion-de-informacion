@@ -91,6 +91,7 @@
                   continue;
                }
                $content = $readabilityData['content']; // main content
+               $showable_content[$item_title]['content'] = $content;
                $d_content = new DOMDocument();
                libxml_use_internal_errors(true); // this is because there are errors with html 5
                $d_content->loadHTML($content);

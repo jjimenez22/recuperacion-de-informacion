@@ -37,23 +37,23 @@
       tf_ifd($tfs);
       file_put_contents('tfidf.json', json_encode($tfs));
 
-      echo '<table border="1">';
-      echo '<tr>';
-      echo '<th>doc/stem</th>';
-     foreach ($tfs as $doc => $stem_list) {
-          echo '<tr>';
-         echo '<th>'.$doc.'</th>';
-         foreach ($stem_list as $stem => $n_aparitions) {
-            echo '<th>'.$stem.'</th>';
-         }
-         echo '</tr>';
-         echo '<tr>';
-         echo '<th> -> </th>';
-         foreach ($stem_list as $stem => $n_aparitions) {
-            echo '<td>'.$n_aparitions.'</td>';
-         }
-         echo '</tr>';
-      }
-      echo '</table>';
+   //    echo '<table border="1">';
+   //    echo '<tr>';
+   //    echo '<th>doc/stem</th>';
+   //  foreach ($tfs as $doc => $stem_list) {
+   //        echo '<tr>';
+   //       echo '<th>'.$doc.'</th>';
+   //       foreach ($stem_list as $stem => $n_aparitions) {
+   //          echo '<th>'.$stem.'</th>';
+   //       }
+   //       echo '</tr>';
+   //       echo '<tr>';
+   //       echo '<th> -> </th>';
+   //       foreach ($stem_list as $stem => $n_aparitions) {
+   //          echo '<td>'.$n_aparitions.'</td>';
+   //       }
+   //       echo '</tr>';
+   //    }
+   //    echo '</table>';
    }
  ?>

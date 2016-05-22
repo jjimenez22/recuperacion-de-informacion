@@ -36,6 +36,7 @@
       $tfs = json_decode(file_get_contents('docsvecs.json'), true);
       tf_ifd($tfs);
       file_put_contents('tfidf.json', json_encode($tfs));
+      kmeans($tfs);
 
    //    echo '<table border="1">';
    //    echo '<tr>';
@@ -55,5 +56,39 @@
    //       echo '</tr>';
    //    }
    //    echo '</table>';
+   }
+   
+   function kmeans($tfs)
+   {
+      $ndocs = count($tfs);
+      $k  = ($ndocs > 10)?intdiv($ndocs, 10):$ndocs; // so there are about 10 docs per centroid
+      $cluster = array();
+      $centroids = array();
+      $i = 0;
+      foreach ($tfs as $doc) // assign the first k docs as centroids
+      {
+         if ($i >= $k)
+            break;
+         
+         $centroid[$i] = $doc;
+         
+         $counter++;
+      }
+      
+      foreach ($tfs as $doc)
+      {
+         for ($i=0;$i<$k;$i++)
+         {
+            
+         }
+      }
+   }
+   
+   function distance_cos(&$vec1, &$vec2) // calculates the cosin of the distance between the two vecs
+   {
+      foreach ($vec1 as $stem => $weight)
+      {
+         
+      }
    }
  ?>

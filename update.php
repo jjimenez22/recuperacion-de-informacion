@@ -24,6 +24,7 @@
 
    function update_index()
    {
+      $changes_made = false;
       // db connection
       $con = new mysqli('localhost', 'root', '', 'ri');
       if($con->connect_error)
@@ -72,6 +73,7 @@
                 $item_title=$x->item($i)->getElementsByTagName('title')->item(0)->childNodes->item(0)->nodeValue;
                 if($charvec != NULL && array_key_exists($item_title, $charvec))
                   continue;
+                $changes_made = true;
                 $item_link=$x->item($i)->getElementsByTagName('link')->item(0)->childNodes->item(0)->nodeValue;
                 $item_desc=$x->item($i)->getElementsByTagName('description')->item(0)->childNodes->item(0)->nodeValue;
                //  echo ("<p><a href='" . $item_link. "'>" . $item_title . "</a>");
@@ -127,5 +129,7 @@
       // echo '</table>';
       file_put_contents('docsvecs.json', json_encode($charvec));
       file_put_contents('showablecontent.json', json_encode($showable_content));
+      
+      return $changes_made;
    }
  ?>

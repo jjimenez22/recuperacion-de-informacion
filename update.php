@@ -109,27 +109,9 @@
              }
           }
       }
-      // echo '<table border="1">';
-      // echo '<tr>';
-      // echo '<th>doc/stem</th>';
-      // foreach ($charvec as $doc => $stem_list) {
-      //    foreach ($stem_list as $stem => $n_aparitions) {
-      //       echo '<th>'.$stem.'</th>';
-      //    }
-      // }
-      // echo '</th>';
-      // foreach ($charvec as $doc => $stem_list) {
-      //    echo '<tr>';
-      //    echo '<th>'.$doc.'</th>';
-      //    foreach ($stem_list as $stem => $n_aparitions) {
-      //       echo '<td>'.$n_aparitions.'</td>';
-      //    }
-      //    echo '</tr>';
-      // }
-      // echo '</table>';
       file_put_contents('docsvecs.json', json_encode($charvec));
       file_put_contents('showablecontent.json', json_encode($showable_content));
-      
+
       return $changes_made;
    }
  ?>

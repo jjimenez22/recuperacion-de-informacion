@@ -53,7 +53,7 @@
 
          $centroid[$i] = $doc;
 
-         $counter++;
+         $i++;
       }
 
       do
@@ -74,7 +74,7 @@
                   $min_distance['centroid']=$i;
                }
             }
-            $cluster[$min_distance['centroid']][$title]=$min_distance['distance'];
+            $cluster[$min_distance['centroid']]['document'][$title]=$min_distance['distance'];
          }
          recalculate_centroids($centroids, $cluster);
       } while(has_cluster_changed($cluster, $centroids));

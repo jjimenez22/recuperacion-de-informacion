@@ -42,7 +42,7 @@
    function kmeans($tfs)
    {
       $ndocs = count($tfs);
-      $k  = ($ndocs > 10)?intdiv($ndocs, 10):$ndocs; // so there are about 10 docs per centroid
+      $k  = ($ndocs > 10)?floor($ndocs/10):$ndocs; // so there are about 10 docs per centroid
       $cluster = array();
       $centroids = array();
       $i = 0;
@@ -147,10 +147,10 @@
       $result = true;
       foreach ($cluster as $i => $centroid)
       {
-         result = ($centroid == $centroids[$i]);
-         if(!result)
+         $result = ($centroid == $centroids[$i]);
+         if(!$result)
             break;
       }
-      return result;
+      return $result;
    }
  ?>

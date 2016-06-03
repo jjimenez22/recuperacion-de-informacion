@@ -111,7 +111,7 @@
    {
       foreach ($centroids as $i => $centroid)
       {
-         $visited_stems = array();
+         $ndocs = count($centroid);
          foreach ($centroid as $stem => $weight) // initialize new accumulate values
          {
             $centroids[$i][$stem]=0;
@@ -127,17 +127,11 @@
                {
                   $centroids[$i][$stem] = $weight;
                }
-               if (array_key_exists($stem, $visited_stems))
-               {
-                  $visited_stems[$stem]++;
-               }else {
-                  $visited_stems[$stem]=1;
-               }
             }
          }
          foreach ($centroids[$i] as $stem => $weight)
          {
-            $centroids[$i][$stem] /= $visited_stems[$stem];
+            $centroids[$i][$stem] /= $ndocs;
          }
       }
    }

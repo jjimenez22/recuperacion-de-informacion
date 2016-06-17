@@ -68,44 +68,44 @@
               // loop through all documents
               $x = $parser->getElementsByTagName('item');
               set_time_limit(300); // to avoid fatal error
-              for ($i=0; $i<$x->length; $i++)
+              for ($i=0; $i<$x->length && $i<5; $i++)
               {
-                $item_title=$x->item($i)->getElementsByTagName('title')->item(0)->childNodes->item(0)->nodeValue;
-                if($charvec != NULL && array_key_exists($item_title, $charvec))
-                  continue;
-                $changes_made = true;
-                $item_link=$x->item($i)->getElementsByTagName('link')->item(0)->childNodes->item(0)->nodeValue;
-                $item_desc=$x->item($i)->getElementsByTagName('description')->item(0)->childNodes->item(0)->nodeValue;
-               //  echo ("<p><a href='" . $item_link. "'>" . $item_title . "</a>");
-               //  echo (" (<a href='" . $link. "'>" . $name . "</a>)");
-               //  echo ("<br>");
-               //  echo ($item_desc . "</p>");
-
-               $showable_content[$item_title]['link'] = $item_link;
-               $showable_content[$item_title]['description'] = $item_desc;
-
-               // extract que main content
-               $html = file_get_contents($item_link);
-               $readability = new Readability($html);
-               try {
-                  $readabilityData = $readability->getContent();
-               } catch (Exception $e) {
-                  continue;
-               }
-               $content = $readabilityData['content']; // main content
-               $showable_content[$item_title]['content'] = $content;
-               $d_content = new DOMDocument();
-               libxml_use_internal_errors(true); // this is because there are errors with html 5
-               $d_content->loadHTML($content);
-               libxml_clear_errors();
-               $content_nodes = $d_content->getElementsByTagName('p'); // main content is distributed within p tags
-
-               foreach ($content_nodes as $p ) // for each p tag in the content
-               {
-                  count_stems($p->textContent, $charvec, $item_title);
-                  // if($charvec !== NULL)
-                  //    break;
-               }
+                   $item_title=$x->item($i)->getElementsByTagName('title')->item(0)->childNodes->item(0)->nodeValue;
+                   if($charvec != NULL && array_key_exists($item_title, $charvec))
+                     continue;
+                   $changes_made = true;
+                   $item_link=$x->item($i)->getElementsByTagName('link')->item(0)->childNodes->item(0)->nodeValue;
+                   $item_desc=$x->item($i)->getElementsByTagName('description')->item(0)->childNodes->item(0)->nodeValue;
+                  //  echo ("<p><a href='" . $item_link. "'>" . $item_title . "</a>");
+                  //  echo (" (<a href='" . $link. "'>" . $name . "</a>)");
+                  //  echo ("<br>");
+                  //  echo ($item_desc . "</p>");
+   
+                  $showable_content[$item_title]['link'] = $item_link;
+                  $showable_content[$item_title]['description'] = $item_desc;
+   
+                  // extract que main content
+                  $html = file_get_contents($item_link);
+                  $readability = new Readability($html);
+                  try {
+                     $readabilityData = $readability->getContent();
+                  } catch (Exception $e) {
+                     continue;
+                  }
+                  $content = $readabilityData['content']; // main content
+                  $showable_content[$item_title]['content'] = $content;
+                  $d_content = new DOMDocument();
+                  libxml_use_internal_errors(true); // this is because there are errors with html 5
+                  $d_content->loadHTML($content);
+                  libxml_clear_errors();
+                  $content_nodes = $d_content->getElementsByTagName('p'); // main content is distributed within p tags
+   
+                  foreach ($content_nodes as $p ) // for each p tag in the content
+                  {
+                     count_stems($p->textContent, $charvec, $item_title);
+                     // if($charvec !== NULL)
+                     //    break;
+                  }
              }
           }
       }

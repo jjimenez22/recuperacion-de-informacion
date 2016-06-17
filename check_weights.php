@@ -10,7 +10,7 @@
 <html>
    <head>
       <meta charset="utf-8">
-      <title>Cluster</title>
+      <title>Vectores caracteristicos</title>
       <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
       <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
@@ -25,7 +25,7 @@
             {
                 $tfs = json_decode($json_file, true);
                 
-                echo '<table border="1">';
+                echo '<table class="table table-bordered">';
                 echo '<tr>';
                 echo '<th>doc/stem</th>';
                 foreach ($tfs as $doc => $stem_list) {

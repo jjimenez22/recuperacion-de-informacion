@@ -42,7 +42,8 @@
    function kmeans($tfs)
    {
       $ndocs = count($tfs);
-      $k  = ($ndocs > 10)?floor($ndocs/10):$ndocs; // so there are about 10 docs per centroid
+      //$k  = ($ndocs > 10)?floor($ndocs/10):$ndocs; // so there are about 10 docs per centroid
+      $k=2;
       $cluster = array();
       $centroids = array();
       $i = 0;
@@ -64,11 +65,11 @@
          }
          foreach ($tfs as $title => $doc)
          {
-            $min_distance = array('distance' => PHP_INT_MAX, 'centroid' => 0);
+            $min_distance = array('distance' => -2, 'centroid' => 0);
             for ($i=0;$i<$k;$i++)
             {
                $distance = distance_cos($doc, $centroid[$i]);
-               if($distance < $min_distance['distance'])
+               if($distance > $min_distance['distance'])
                {
                   $min_distance['distance']=$distance;
                   $min_distance['centroid']=$i;

@@ -43,7 +43,7 @@
    {
       $ndocs = count($tfs);
       //$k  = ($ndocs > 10)?floor($ndocs/10):$ndocs; // so there are about 10 docs per centroid
-      $k=2;
+      $k=3;
       $cluster = array();
       $centroids = array();
       $i = 0;
@@ -52,33 +52,36 @@
          if ($i >= $k)
             break;
 
-         $centroid[$i] = $doc;
+         $centroids[$i] = $doc;
 
          $i++;
       }
 
+      $iterations=0;
       do
       {
          for ($i=0;$i<$k;$i++)
          {
-            $cluster[$i]['centroid']=$centroid[$i];
+            $cluster[$i]['centroid']=$centroids[$i];
          }
          foreach ($tfs as $title => $doc)
          {
-            $min_distance = array('distance' => -2, 'centroid' => 0);
+            $min_distance = array('distance' => PHP_INT_MAX, 'centroid' => 0);
             for ($i=0;$i<$k;$i++)
             {
-               $distance = distance_cos($doc, $centroid[$i]);
-               if($distance > $min_distance['distance'])
+               $distance = distance_cos($doc, $centroids[$i]);
+               if($distance < $min_distance['distance'])
                {
                   $min_distance['distance']=$distance;
                   $min_distance['centroid']=$i;
                }
             }
             $cluster[$min_distance['centroid']]['document'][$title]=$min_distance['distance'];
+            erase_from_other($cluster, $min_distance['centroid'], $title);
          }
          recalculate_centroids($centroids, $cluster);
-      } while(has_cluster_changed($cluster, $centroids));
+         $iterations++;
+      } while(has_cluster_changed($cluster, $centroids) && $iterations<100);
       file_put_contents('cluster.json', json_encode($cluster));
    }
 
@@ -105,7 +108,7 @@
             $acc += pow($weight, 2);
          }
       }
-      return cos(sqrt($acc));
+      return sqrt($acc);
    }
 
    function recalculate_centroids(&$centroids, &$cluster)
@@ -142,10 +145,22 @@
       $result = true;
       foreach ($cluster as $i => $centroid)
       {
-         $result = ($centroid == $centroids[$i]);
-         if(!$result)
+         $result = ($centroid['centroid'] != $centroids[$i]);
+         if($result)
             break;
       }
       return $result;
+   }
+   
+   function erase_from_other(&$cluster, $actual_centroid, $title)
+   {
+      foreach ($cluster as $i => $centroid)
+      {
+         if($i === $actual_centroid)
+            continue;
+            
+         if (!empty($cluster[$i]['document']) && array_key_exists($title, $cluster[$i]['document']))
+            unset($cluster[$i]['document'][$title]);
+      }
    }
  ?>

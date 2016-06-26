@@ -4,7 +4,7 @@
 
    function startup()
    {
-      if (update_index());
+      if (update_index())
          update_vecs();
    }
 ?>

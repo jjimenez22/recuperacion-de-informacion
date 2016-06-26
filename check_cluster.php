@@ -57,7 +57,7 @@
                      </tr>';
                   }
                      echo '</table>';*/
-                     if(array_key_exists('document', $centroid))
+                     if(array_key_exists('document', $centroid) && $i===1)
                      {
                         
                         echo '<h2>Documents in centroid '.$i.' :</h2>';

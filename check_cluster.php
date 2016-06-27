@@ -27,7 +27,7 @@
 
                foreach ($cluster as $i => $centroid)
                {
-                  /*echo '
+                  echo '
                   <table class="table table-bordered">
                      <thead>
                         <tr>
@@ -56,18 +56,18 @@
                         </td>
                      </tr>';
                   }
-                     echo '</table>';*/
-                     if(array_key_exists('document', $centroid) && $i===1)
+                  echo '</table>';
+                  if(array_key_exists('document', $centroid) && $i===1)
+                  {
+                     
+                     echo '<h4>Documents in centroid '.$i.' :</h2>';
+                     echo '<table class="table table-bordered>';
+                     foreach ($centroid['document'] as $title => $distance)
                      {
-                        
-                        echo '<h2>Documents in centroid '.$i.' :</h2>';
-                        echo '<table class="table table-bordered>';
-                        foreach ($centroid['document'] as $title => $distance)
-                        {
-                           echo '<tr><td>'.$title.'</td><td>'.$distance.'</td></tr>';
-                        }
-                        echo '</table>';
+                        echo '<tr><td>'.$title.'</td><td>'.$distance.'</td></tr>';
                      }
+                     echo '</table>';
+                  }
                }
             } else
             {

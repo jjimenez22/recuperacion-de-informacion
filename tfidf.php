@@ -79,7 +79,7 @@
             $cluster[$min_distance['centroid']]['document'][$title]=$min_distance['distance'];
             erase_from_other($cluster, $min_distance['centroid'], $title);
          }
-         recalculate_centroids($centroids, $cluster);
+         recalculate_centroids($centroids, $cluster, $tfs);
          $iterations++;
       } while(has_cluster_changed($cluster, $centroids) && $iterations<100);
       file_put_contents('cluster.json', json_encode($cluster));
@@ -111,18 +111,17 @@
       return sqrt($acc);
    }
 
-   function recalculate_centroids(&$centroids, &$cluster)
+   function recalculate_centroids(&$centroids, &$cluster, &$docs)
    {
       foreach ($centroids as $i => $centroid)
       {
-         $ndocs = count($centroid);
          foreach ($centroid as $stem => $weight) // initialize new accumulate values
          {
             $centroids[$i][$stem]=0;
          }
-         foreach ($cluster[$i] as $doc) // for each vector
+         foreach ($cluster[$i]['document'] as $title => $doc) // for each vector
          {
-            foreach ($doc as $stem => $weight) // for each stem in vector
+            foreach ($docs[$title] as $stem => $weight) // for each stem in vector
             {
                if (array_key_exists($stem, $centroids[$i]))
                {
@@ -133,6 +132,7 @@
                }
             }
          }
+         $ndocs = count($centroid);
          foreach ($centroids[$i] as $stem => $weight)
          {
             $centroids[$i][$stem] /= $ndocs;

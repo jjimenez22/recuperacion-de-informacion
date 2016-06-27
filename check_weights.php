@@ -42,7 +42,7 @@
                     foreach ($stem_list as $stem => $n_aparitions) {
                         echo '<td>'.$n_aparitions.'</td>';
                     }
-                echo '</tr>';
+                    echo '</tr>';
                 }
                 echo '</table>';
                 

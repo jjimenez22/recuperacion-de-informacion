@@ -27,7 +27,7 @@
 
                foreach ($cluster as $i => $centroid)
                {
-                  echo '
+                  /*echo '
                   <table class="table table-bordered">
                      <thead>
                         <tr>
@@ -56,8 +56,8 @@
                         </td>
                      </tr>';
                   }
-                  echo '</table>';
-                  if(array_key_exists('document', $centroid) && $i===1)
+                  echo '</table>';*/
+                  if(array_key_exists('document', $centroid))
                   {
                      
                      echo '<h4>Documents in centroid '.$i.' :</h2>';

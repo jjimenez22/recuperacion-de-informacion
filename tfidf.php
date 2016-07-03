@@ -43,7 +43,7 @@
    {
       $ndocs = count($tfs);
       //$k  = ($ndocs > 10)?floor($ndocs/10):$ndocs; // so there are about 10 docs per centroid
-      $k=3;
+      $k=2;
       $cluster = array();
       $centroids = array();
       $i = 0;
@@ -70,7 +70,7 @@
             for ($i=0;$i<$k;$i++)
             {
                $distance = distance_cos($doc, $centroids[$i]);
-               if($distance < $min_distance['distance'])
+               if($distance > $min_distance['distance'])
                {
                   $min_distance['distance']=$distance;
                   $min_distance['centroid']=$i;
@@ -85,7 +85,7 @@
       file_put_contents('cluster.json', json_encode($cluster));
    }
 
-   function distance_cos(&$vec1, &$vec2) // calculates the cosin of the distance between the two vecs
+   function distance_cos(&$vec1, &$vec2) // calculates the distance between the two vecs
    {
       $already=array();
       $acc=0;
@@ -108,7 +108,7 @@
             $acc += pow($weight, 2);
          }
       }
-      return sqrt($acc);
+      return $acc;
    }
 
    function recalculate_centroids(&$centroids, &$cluster, &$docs)
@@ -118,6 +118,7 @@
          foreach ($centroid as $stem => $weight) // initialize new accumulate values
          {
             $centroids[$i][$stem]=0;
+            $ndocs[$stem]=0;
          }
          foreach ($cluster[$i]['document'] as $title => $doc) // for each vector
          {
@@ -126,16 +127,22 @@
                if (array_key_exists($stem, $centroids[$i]))
                {
                   $centroids[$i][$stem] += $weight;
+                  $ndocs[$stem]++;
                } else
                {
                   $centroids[$i][$stem] = $weight;
+                  $ndocs[$stem] = 1;
                }
             }
          }
-         $ndocs = count($centroid);
          foreach ($centroids[$i] as $stem => $weight)
          {
-            $centroids[$i][$stem] /= $ndocs;
+            if($ndocs[$stem] !== 0)
+            {
+               $centroids[$i][$stem] /= $ndocs[$stem];
+            }else {
+               unset($centroids[$i][$stem]);
+            }
          }
       }
    }

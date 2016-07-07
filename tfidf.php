@@ -70,7 +70,7 @@
             for ($i=0;$i<$k;$i++)
             {
                $distance = distance_cos($doc, $centroids[$i]);
-               if($distance > $min_distance['distance'])
+               if($distance < $min_distance['distance'])
                {
                   $min_distance['distance']=$distance;
                   $min_distance['centroid']=$i;
@@ -142,6 +142,7 @@
                $centroids[$i][$stem] /= $ndocs[$stem];
             }else {
                unset($centroids[$i][$stem]);
+               // $centroids[$i][$stem] = 0;
             }
          }
       }

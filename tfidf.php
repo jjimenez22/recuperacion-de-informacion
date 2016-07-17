@@ -41,9 +41,30 @@
 
    function kmeans($tfs)
    {
+      // $tfs = array(
+      //    'A' => array(
+      //     'peso' => 1,
+      //     'indice' => 1
+      //    ),
+      //    'B' => array(
+      //     'peso' => 2,
+      //     'indice' => 1
+      //    ),
+      //    'C' => array(
+      //     'peso' => 4,
+      //     'indice' => 3
+      //    ),
+      //    'D' => array(
+      //     'peso' => 5,
+      //     'indice' => 4
+      //    )
+      // );
+      
       $ndocs = count($tfs);
       //$k  = ($ndocs > 10)?floor($ndocs/10):$ndocs; // so there are about 10 docs per centroid
-      $k=2;
+      $kfile = fopen('kfile.txt', 'r');
+      $k=intval(fgets($kfile));
+      fclose($kfile);
       $cluster = array();
       $centroids = array();
       $i = 0;
@@ -108,7 +129,7 @@
             $acc += pow($weight, 2);
          }
       }
-      return $acc;
+      return sqrt($acc);
    }
 
    function recalculate_centroids(&$centroids, &$cluster, &$docs)

@@ -4,7 +4,7 @@
    //   class for getting main content of a doc
    require 'php-readability/Readability.inc.php';
 
-   function count_stems($text, &$charvec, $item_title)
+   function count_stems($text, &$charvec, $item_title) // convierte el documento en vector con cantidad de apariciones de cada etem en el
    {
       $words = extract_words($text);
       foreach ($words as $word) // for each word in current p tag
@@ -80,10 +80,10 @@
                   //  echo (" (<a href='" . $link. "'>" . $name . "</a>)");
                   //  echo ("<br>");
                   //  echo ($item_desc . "</p>");
-   
+
                   $showable_content[$item_title]['link'] = $item_link;
                   $showable_content[$item_title]['description'] = $item_desc;
-   
+
                   // extract que main content
                   $html = file_get_contents($item_link);
                   $readability = new Readability($html);
@@ -99,7 +99,7 @@
                   $d_content->loadHTML($content);
                   libxml_clear_errors();
                   $content_nodes = $d_content->getElementsByTagName('p'); // main content is distributed within p tags
-   
+
                   foreach ($content_nodes as $p ) // for each p tag in the content
                   {
                      count_stems($p->textContent, $charvec, $item_title);

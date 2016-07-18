@@ -4,6 +4,8 @@
    {
       $docnum = count($tfs); // number of docs
       $idfs = array();
+      $qdata = array(); //to be used in queries
+      $qdata['docnum']=$docnum;
 
       foreach ($tfs as $doc => $stemvec) {
          $stemnum = count($stemvec); // number of stems in a doc
@@ -20,6 +22,7 @@
       }
 
       foreach ($idfs as $stem => $ndocs) {
+         $qdata['stem'][$stem]=$ndocs;
          $idfs[$stem] = log($docnum/$ndocs);
       }
 
@@ -28,6 +31,7 @@
             $tfs[$doc][$stem] *= $idfs[$stem];
          }
       }
+      file_put_contents('qdata.json', json_encode($qdata));
    }
 
    function update_vecs()
@@ -59,7 +63,7 @@
       //     'indice' => 4
       //    )
       // );
-      
+
       $ndocs = count($tfs);
       //$k  = ($ndocs > 10)?floor($ndocs/10):$ndocs; // so there are about 10 docs per centroid
       $kfile = fopen('kfile.txt', 'r');
@@ -180,14 +184,14 @@
       }
       return $result;
    }
-   
+
    function erase_from_other(&$cluster, $actual_centroid, $title)
    {
       foreach ($cluster as $i => $centroid)
       {
          if($i === $actual_centroid)
             continue;
-            
+
          if (!empty($cluster[$i]['document']) && array_key_exists($title, $cluster[$i]['document']))
             unset($cluster[$i]['document'][$title]);
       }

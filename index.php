@@ -1,3 +1,5 @@
+<?php session_start(); ?>
+
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -12,7 +14,7 @@
 		<div class="container">
 			<div class="page-header">
 				<h1>News Recovery</h1>
-				<a href="user/<?php if(isset($_SESSION['username'])): echo 'logout.php">'.$_SESSION['username'].' LogOut'; else: echo 'login.php">LogIn'; endif;?></a>
+				<a href="user/<?php if(isset($_SESSION['username'])): echo 'logout.php\">'.$_SESSION['username'].' LogOut'; else: echo 'login.php\">LogIn'; endif;?></a>
 			</div>
 			<form role="form" action="process_query.php" method="post">
 				<div class="form-group">

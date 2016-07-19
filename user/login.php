@@ -1,7 +1,7 @@
-<?php 
+<?php
 session_start();
 if (isset($_SESSION['username'])){
-	header('Location: ../index.php'); 	
+	header('Location: //localhost/recuperacion-de-informacion/index.php');
 }
 ?>
 
@@ -20,7 +20,7 @@ if (isset($_SESSION['username'])){
 			<div class="page-header">
 				<h1>Log In</h1>
 			</div>
-			<form role="form" action="process_login.php" method="post">
+			<form role="form" action="//localhost/recuperacion-de-informacion/user/process_login.php" method="post">
 				<div class="form-group">
 					<label for="user">Username:</label>
 					<input type="text" class="form-control" id="user" name="username"/>

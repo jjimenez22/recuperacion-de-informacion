@@ -1,7 +1,8 @@
 <?php
-   include 'startup.php';
 
-   startup();
+   // include 'startup.php';
+   //
+   // startup();
 
    $json_file = file_get_contents('tfidf.json');
 ?>
@@ -24,28 +25,28 @@
             if ($json_file !== false)
             {
                 $tfs = json_decode($json_file, true);
-                
+
                 echo '<table class="table table-bordered">';
                 echo '<tr>';
                 echo '<th>doc/stem</th>';
                 foreach ($tfs as $doc => $stem_list) {
                     echo '<tr>';
                     echo '<th>'.$doc.'</th>';
-                    
+
                     foreach ($stem_list as $stem => $n_aparitions) {
                         echo '<th>'.$stem.'</th>';
                     }
                     echo '</tr>';
                     echo '<tr>';
                     echo '<th> -> </th>';
-                    
+
                     foreach ($stem_list as $stem => $n_aparitions) {
                         echo '<td>'.$n_aparitions.'</td>';
                     }
                     echo '</tr>';
                 }
                 echo '</table>';
-                
+
             } else
             {
                echo "<h1>There are no documents</h1>";

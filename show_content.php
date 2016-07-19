@@ -1,5 +1,5 @@
 <?php
-$title $_GET['title'];
+$title = $_GET['title'];
 $content = json_decode(file_get_contents('showablecontent.json'), true);
 $content = $content[$title]['content'];
  ?>

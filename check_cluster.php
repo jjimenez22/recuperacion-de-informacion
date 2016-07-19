@@ -1,7 +1,8 @@
 <?php
-   include 'startup.php';
 
-   startup();
+   // include 'startup.php';
+   //
+   // startup();
 
    $json_file = file_get_contents('cluster.json');
 ?>
@@ -24,64 +25,35 @@
             if ($json_file !== false)
             {
                $cluster = json_decode($json_file, true);
-               // var_dump($cluster);
 
-               // foreach ($cluster as $i => $centroid)
-               // {
-               //    echo '
-               //    <table class="table table-bordered">
-               //       <thead>
-               //          <tr>
-               //             <th>
-               //                Centroid '.$i.'
-               //             </th>
-               //          </tr>
-               //       </thead>
-               //       <tr>
-               //          <th>
-               //             Stems
-               //          </th>
-               //          <th>
-               //             Weight
-               //          </th>
-               //       </tr>';
-               //    foreach ($centroid['centroid'] as $stem => $weight)
-               //    {
-               //       echo '
-               //       <tr>
-               //          <td>
-               //             '.$stem.'
-               //          </td>
-               //          <td>
-               //             '.$weight.'
-               //          </td>
-               //       </tr>';
-               //    }
-               //    echo '</table>';
-               //    if(array_key_exists('document', $centroid))
-               //    {
-                     
-               //       echo '<h4>Documents in centroid '.$i.' :</h2>';
-               //       echo '<table class="table table-bordered>';
-               //       foreach ($centroid['document'] as $title => $distance)
-               //       {
-               //          echo '<tr><td>'.$title.'</td><td>'.$distance.'</td></tr>';
-               //       }
-               //       echo '</table>';
-               //    }
-               //    break;
-               // }
-               
                foreach ($cluster as $i => $centroid) {
+                  if ($centroid['ignore']) {
+                     continue;
+                  }
+
                   echo '<h4>centroid '.$i.':</h4><br>';
                   echo 'Vector:<br>';
+                  echo '<table class="table table-bordered">';
+                  echo '<tr>';
                   foreach ($centroid['centroid'] as $stem => $weight) {
-                     echo '"'.$stem.'" - '.$weight.'<br>';
+                     echo '<th>'.$stem.'</th>';
                   }
+                  echo '</tr>';
+                  echo '<tr>';
+                  foreach ($centroid['centroid'] as $stem => $weight) {
+                     echo '<td>'.$weight.'</td>';
+                  }
+                  echo '</tr>';
+                  echo '</table>';
+
                   echo '<hr>Documents:<br>';
+                  echo '<table class="table table-bordered">';
                   foreach ($centroid['document'] as $title => $weight) {
-                     echo '"'.$title.'" - '.$weight.'<br>';
+                     echo '<tr>';
+                     echo '<th>'.$title.'</th><td>'.$weight.'</td>';
+                     echo '</tr>';
                   }
+                  echo '</table>';
                   echo '<hr>';
                }
             } else

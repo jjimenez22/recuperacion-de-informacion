@@ -1,10 +1,39 @@
 <?php
 
+   function recomend($tfidf) {
+      $con = new mysqli('localhost', 'root', '', 'ri');
+      if($con->connect_error)
+      {
+         die('error: '.$com->connect_error);
+      }
+      $res = $con->query('select username from user');
+      $con->close();
+      if ($res->num_rows>0) {
+         while ($row = $res->fetch_assoc()) {
+            $usr[$row['username']] = json_decode(file_get_contents('usrvec/'.$row['username'].'.json'), true);
+            $usr_dist[$row['username']] = PHP_INT_MAX;
+         }
+         foreach ($tfidf as $title => $vec) {
+            foreach ($usr_dist as $usrn => $distance) {
+               if ($usr[$usrn] != NULL) {
+                  $dist = distance_cos($vec, $usr[$usrn]);
+                  if ($dist < $usr_dist[$usrn]) {
+                     $usr_dist[$usrn]=$dist;
+                     $usr_doc[$usrn]=$title;
+                  }
+               }
+            }
+         }
+         file_put_contents('usrdoc/usrdoc.json', json_encode($usr_doc));
+      }
+   }
+
    function tf_ifd(&$tfs)
    {
       $docnum = count($tfs); // number of docs
       $idfs = array();
       $qdata = array(); //to be used in queries
+      $qdata['stem'] = array();
       $qdata['docnum']=$docnum;
 
       foreach ($tfs as $doc => $stemvec) {
@@ -41,6 +70,7 @@
       tf_ifd($tfs);
       file_put_contents('tfidf.json', json_encode($tfs));
       kmeans($tfs);
+      recomend($tfs);
    }
 
    function kmeans($tfs)
@@ -78,6 +108,7 @@
             break;
 
          $centroids[$i] = $doc;
+         $cluster[$i]['ignore']=false;
 
          $i++;
       }
@@ -94,11 +125,13 @@
             $min_distance = array('distance' => PHP_INT_MAX, 'centroid' => 0);
             for ($i=0;$i<$k;$i++)
             {
-               $distance = distance_cos($doc, $centroids[$i]);
-               if($distance < $min_distance['distance'])
-               {
-                  $min_distance['distance']=$distance;
-                  $min_distance['centroid']=$i;
+               if (!$cluster[$i]['ignore']) {
+                  $distance = distance_cos($doc, $centroids[$i]);
+                  if($distance < $min_distance['distance'])
+                  {
+                     $min_distance['distance']=$distance;
+                     $min_distance['centroid']=$i;
+                  }
                }
             }
             $cluster[$min_distance['centroid']]['document'][$title]=$min_distance['distance'];
@@ -106,7 +139,7 @@
          }
          recalculate_centroids($centroids, $cluster, $tfs);
          $iterations++;
-      } while(has_cluster_changed($cluster, $centroids) && $iterations<100);
+      } while(has_cluster_changed($cluster, $centroids) && $iterations<1000);
       file_put_contents('cluster.json', json_encode($cluster));
    }
 
@@ -140,6 +173,11 @@
    {
       foreach ($centroids as $i => $centroid)
       {
+         if (empty($cluster[$i]['document'])) {
+            $cluster[$i]['ignore']=true;
+            continue;
+         }
+
          foreach ($centroid as $stem => $weight) // initialize new accumulate values
          {
             $centroids[$i][$stem]=0;

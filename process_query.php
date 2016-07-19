@@ -1,7 +1,21 @@
 <?php
+	session_start();
 	// functions for cleaning content
 	require 'text_processor.php';
 	require 'tfidf.php';
+
+	function mean_query($vec) {
+		foreach ($vec as $stem => $weight) {
+			if (isset($_SESSION['vec']) && !empty($_SESSION['vec']) && array_key_exists($stem, $_SESSION['vec'])) {
+				$_SESSION['vec'][$stem] += $weight;
+			} else {
+				$_SESSION['vec'][$stem] = $weight;
+			}
+		}
+		foreach ($_SESSION['vec'] as $stem => $weight) {
+			$_SESSION['vec'][$stem] /= 2;
+		}
+	}
 
 	function numerize_query($query) {
 		$words = extract_words($query);
@@ -24,7 +38,7 @@
 
 	function calculate_weights($tf) {
 		$amnt = count($tf); //amount of words in query
-		$qdata = json_decode(file_get_contents('qdata.json', true));
+		$qdata = json_decode(file_get_contents('qdata.json'), true);
 		foreach ($tf as $stem => $aprt) {
 			$tf[$stem] /= $amnt;
 			if (array_key_exists($stem, $qdata['stem'])) {
@@ -39,10 +53,14 @@
 	function process_query($query) {
 		$aprt = numerize_query($query);
 		$vec = calculate_weights($aprt);
+		mean_query($vec);
 		$cluster = json_decode(file_get_contents('cluster.json'), true);
 		$min = PHP_INT_MAX;
 
 		foreach ($cluster as $i => $centroid) {
+			if ($centroid['ignore']) {
+				continue;
+			}
 			$dist = distance_cos($vec, $centroid['centroid']);
 			if ($dist < $min) {
 				$min = $dist;
@@ -54,7 +72,7 @@
 
 	$user_query = $_POST['query'];
 	$titles = process_query($user_query);
-	$documents = json_decode(file_get_contents('shoeablecontent.json'), true);
+	$documents = json_decode(file_get_contents('showablecontent.json'), true);
 ?>
 
 <!DOCTYPE html>
@@ -70,16 +88,16 @@
 	<body>
 		<div class="container">
 			<div class="page-header">
-				<h1>News Recovery</h1>
+				<h1>Search: <?php echo $user_query; ?></h1>
 				<a href="index.php">Back to Search Engine</a>
 			</div>
-			<ul class="">
+			<div class="list-group">
 				<?php
 				foreach ($titles as $title => $distance) {
-					echo '<a href=\"'.$documents[$title]['link'].'\"><li><h3>'.$title.'</h3><p>'.$documents[$title]['description'].'</p></li></a>';
-					echo '<a href=\"show_content.php?title='.$title.'\"><button type=\"button\" name=\"button\">Broken link</button></a>';
+					echo '<a href="'.$documents[$title]['link'].'" class="list-group-item"><h3>'.$title.'</h3><p>'.$documents[$title]['description'].'</p></a>';
+					echo '<a href="show_content.php?title='.$title.'"><button type="button" name="button">Broken link</button></a>';
 				}
 				 ?>
-			</ul>
+			</div>
 	</body>
 </html>

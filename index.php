@@ -23,10 +23,20 @@
 				</div>
 				<button type="submit" class="btn btn-success">Search!</button>
 			</form>
+			<?php if (isset($_SESSION['type']) && $_SESSION['type']==0): ?>
+			<button type="button" class="btn btn-info" onclick="window.open('startup.php')">Update</button>
 			<button type="button" class="btn btn-info" onclick="window.open('check_cluster.php', '_blank')">Check Cluster</button>
 			<button type="button" class="btn btn-info" onclick="window.open('check_weights.php', '_blank')">Check Weights</button>
-			<button type="button" class="btn btn-info" onclick="window.open('setk.php', '_blank')">Set K</button>
+			<button type="button" class="btn btn-info" onclick="window.open('setk.html', '_blank')">Set K</button>
+			<?php endif; ?>
+			<?php if (isset($_SESSION['recdoc'])):
+				$documents = json_decode(file_get_contents('showablecontent.json'), true);
+				?>
+				<h2>Recommended for you:</h2>
+				<a href="<?php echo $documents[$_SESSION['recdoc']]['link'];?>"><h3><?php echo $_SESSION['recdoc'];?></h3><p>
+					<?php echo $documents[$_SESSION['recdoc']]['description'];?>
+				</p></a><a href="show_content.php?title=<?php echo $_SESSION['recdoc'];?>"><button type="button" name="button">Broken Link</button></a>
+			<?php endif;?>
 		</div>
-
 	</body>
 </html>

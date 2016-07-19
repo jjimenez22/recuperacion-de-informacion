@@ -15,11 +15,12 @@ function user_exists($username) {
    return ($res->num_rows > 0);
 }
 
-function get_usertype($user) {
+function get_usertype($username) {
    $con = start_model();
    $res = $con->query('select type from user where username = \''.$username.'\'');
    $con->close();
-   return $res->fetch_assoc()['type'];
+   $res = $res->fetch_assoc();
+   return $res['type'];
 }
 
 function correctpss($usr, $pss) {

@@ -2,9 +2,7 @@
    require 'update.php';
    require 'tfidf.php';
 
-   function startup()
-   {
-      if (update_index())
-         update_vecs();
-   }
+   if (update_index())
+      update_vecs();
+   header('Location: index.php');
 ?>

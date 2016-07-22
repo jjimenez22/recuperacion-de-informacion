@@ -67,7 +67,7 @@
 
               // loop through all documents
               $x = $parser->getElementsByTagName('item');
-              set_time_limit(300); // to avoid fatal error
+              set_time_limit(1000); // to avoid fatal error
               for ($i=0; $i<$x->length && $i<5; $i++)
               {
                    $item_title=$x->item($i)->getElementsByTagName('title')->item(0)->childNodes->item(0)->nodeValue;

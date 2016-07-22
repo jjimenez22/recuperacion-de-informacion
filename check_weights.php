@@ -29,6 +29,7 @@
                 echo '<table class="table table-bordered">';
                 echo '<tr>';
                 echo '<th>doc/stem</th>';
+                echo '<th>Number of documents: '.count($tfs).'</th>';
                 foreach ($tfs as $doc => $stem_list) {
                     echo '<tr>';
                     echo '<th>'.$doc.'</th>';

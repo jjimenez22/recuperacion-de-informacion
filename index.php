@@ -29,13 +29,13 @@
 			<button type="button" class="btn btn-info" onclick="window.open('check_weights.php', '_blank')">Check Weights</button>
 			<button type="button" class="btn btn-info" onclick="window.open('setk.html', '_blank')">Set K</button>
 			<?php endif; ?>
-			<?php if (isset($_SESSION['recdoc'])):
+			<?php if (isset($_SESSION['recdoc']) && !empty($_SESSION['recdoc']) && array_key_exists($_SESSION['username'], $_SESSION['recdoc'])):
 				$documents = json_decode(file_get_contents('showablecontent.json'), true);
 				?>
 				<h2>Recommended for you:</h2>
-				<a href="<?php echo $documents[$_SESSION['recdoc']]['link'];?>"><h3><?php echo $_SESSION['recdoc'];?></h3><p>
-					<?php echo $documents[$_SESSION['recdoc']]['description'];?>
-				</p></a><a href="show_content.php?title=<?php echo $_SESSION['recdoc'];?>"><button type="button" name="button">Broken Link</button></a>
+				<a href="<?php echo $documents[$_SESSION['recdoc'][$_SESSION['username']]]['link'];?>"><h3><?php echo $_SESSION['recdoc'][$_SESSION['username']];?></h3><p>
+					<?php echo $documents[$_SESSION['recdoc'][$_SESSION['username']]]['description'];?>
+				</p></a><a href="show_content.php?title=<?php echo $_SESSION['recdoc'][$_SESSION['username']];?>"><button type="button" name="button">Broken Link</button></a>
 			<?php endif;?>
 		</div>
 	</body>

@@ -1,6 +1,8 @@
 <?php
 
-   function recomend($tfidf) {
+   function recomend() {
+      $tfidf = json_decode(file_get_contents('tfidf.json'), true);
+
       $con = new mysqli('localhost', 'root', '', 'ri');
       if($con->connect_error)
       {
@@ -69,11 +71,11 @@
       $tfs = json_decode(file_get_contents('docsvecs.json'), true);
       tf_ifd($tfs);
       file_put_contents('tfidf.json', json_encode($tfs));
-      kmeans($tfs);
-      recomend($tfs);
+      kmeans();
+      recomend();
    }
 
-   function kmeans($tfs)
+   function kmeans()
    {
       // $tfs = array(
       //    'A' => array(
@@ -93,6 +95,9 @@
       //     'indice' => 4
       //    )
       // );
+      ini_set('max_execution_time', 1000);
+
+      $tfs = json_decode(file_get_contents('tfidf.json'), true);
 
       $ndocs = count($tfs);
       //$k  = ($ndocs > 10)?floor($ndocs/10):$ndocs; // so there are about 10 docs per centroid
@@ -139,7 +144,7 @@
          }
          recalculate_centroids($centroids, $cluster, $tfs);
          $iterations++;
-      } while(has_cluster_changed($cluster, $centroids) && $iterations<1000);
+      } while(has_cluster_changed($cluster, $centroids) && $iterations<250);
       file_put_contents('cluster.json', json_encode($cluster));
    }
 

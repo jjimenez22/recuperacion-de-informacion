@@ -53,7 +53,8 @@
 	function process_query($query) {
 		$aprt = numerize_query($query);
 		$vec = calculate_weights($aprt);
-		mean_query($vec);
+		if (isset($_SESSION['username']))
+			mean_query($vec);
 		$cluster = json_decode(file_get_contents('cluster.json'), true);
 		$min = PHP_INT_MAX;
 
@@ -72,6 +73,7 @@
 
 	$user_query = $_POST['query'];
 	$titles = process_query($user_query);
+	recomend();
 	$documents = json_decode(file_get_contents('showablecontent.json'), true);
 ?>
 
